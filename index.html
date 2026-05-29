@@ -1,1 +1,379 @@
-<!DOCTYPE html><html><head><title>f6dev</title></head><body><h1>coming soon</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>f6dev — coming soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --olive: #8cb81a;
+      --magenta: #c0176b;
+      --dark-olive: #4a5a10;
+      --bg: #0c1400;
+      --text: #d4ed8a;
+      --dim: #4a6a18;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'VT323', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* blob logo */
+    .logo-blob {
+      width: 150px;
+      height: 150px;
+      background: var(--olive);
+      border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      animation: morph 7s ease-in-out infinite, float 4s ease-in-out infinite;
+      box-shadow: 0 0 40px rgba(140, 184, 26, 0.2);
+    }
+
+    @keyframes morph {
+      0%,100% { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; }
+      25%      { border-radius: 50% 50% 38% 62% / 62% 40% 58% 42%; }
+      50%      { border-radius: 38% 62% 62% 38% / 52% 46% 54% 48%; }
+      75%      { border-radius: 55% 45% 44% 56% / 38% 62% 50% 50%; }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-14px); }
+    }
+
+    .rocket-svg {
+      width: 75px;
+      height: 75px;
+    }
+
+    /* brand text */
+    .brand {
+      font-family: 'Caveat', cursive;
+      font-size: 3.2rem;
+      color: var(--magenta);
+      line-height: 1;
+      text-shadow: 3px 3px 0 var(--dark-olive);
+      margin-bottom: 0.1rem;
+    }
+
+    .tagline-sub {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: #6a8a25;
+      margin-bottom: 1.8rem;
+    }
+
+    /* glitch title */
+    .glitch {
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      color: var(--text);
+      position: relative;
+      display: inline-block;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+    }
+
+    .glitch::before {
+      color: var(--magenta);
+      animation: g1 4s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    }
+
+    .glitch::after {
+      color: var(--olive);
+      animation: g2 4s infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    }
+
+    @keyframes g1 {
+      0%,88%,100% { transform: translate(0); opacity: 1; }
+      90%          { transform: translate(-4px, 1px); opacity: 0.8; }
+      92%          { transform: translate(4px, -2px); opacity: 0.9; }
+      94%          { transform: translate(-2px, 0); opacity: 1; }
+    }
+
+    @keyframes g2 {
+      0%,88%,100% { transform: translate(0); opacity: 1; }
+      89%          { transform: translate(4px, 2px); opacity: 0.8; }
+      91%          { transform: translate(-4px, -1px); opacity: 0.9; }
+      93%          { transform: translate(2px, 0); opacity: 1; }
+    }
+
+    /* terminal block */
+    .terminal-block {
+      margin: 0.8rem 0;
+    }
+
+    .terminal-prompt {
+      font-size: 1.3rem;
+      color: var(--dim);
+    }
+
+    .terminal-prompt span {
+      color: var(--olive);
+    }
+
+    .typing-row {
+      font-size: 1.7rem;
+      color: var(--olive);
+      min-height: 2.2rem;
+      margin-top: 0.2rem;
+    }
+
+    .cursor {
+      color: var(--magenta);
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* links */
+    .links {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .link {
+      font-family: 'VT323', monospace;
+      font-size: 1.3rem;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--dim);
+      padding: 0.3rem 1.1rem;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--magenta);
+      transform: translateX(-100%);
+      transition: transform 0.15s;
+      z-index: -1;
+    }
+
+    .link:hover { color: #fff; border-color: var(--magenta); }
+    .link:hover::before { transform: translateX(0); }
+
+    /* status bar */
+    .statusbar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.35rem 1rem;
+      background: rgba(12, 20, 0, 0.85);
+      border-top: 1px solid var(--dim);
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: var(--dim);
+      z-index: 20;
+      backdrop-filter: blur(4px);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: var(--olive);
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 2s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.3; transform: scale(0.7); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="container">
+
+    <!-- blob + rocket logo -->
+    <div class="logo-blob">
+      <svg class="rocket-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- body -->
+        <path d="M50 8 C38 8 22 24 22 50 L22 72 L50 88 L78 72 L78 50 C78 24 62 8 50 8Z" fill="#c0176b"/>
+        <!-- nose tip -->
+        <path d="M50 8 C44 8 38 14 35 22 L65 22 C62 14 56 8 50 8Z" fill="#a01258"/>
+        <!-- window -->
+        <circle cx="50" cy="44" r="10" fill="#8cb81a"/>
+        <circle cx="50" cy="44" r="7" fill="#6a9214"/>
+        <!-- fin left -->
+        <path d="M22 62 L6 84 L22 76Z" fill="#a01258"/>
+        <!-- fin right -->
+        <path d="M78 62 L94 84 L78 76Z" fill="#a01258"/>
+        <!-- exhaust glow -->
+        <ellipse cx="50" cy="90" rx="12" ry="6" fill="#8cb81a" opacity="0.5"/>
+        <ellipse cx="50" cy="93" rx="7" ry="4" fill="#d4ed8a" opacity="0.3"/>
+      </svg>
+    </div>
+
+    <div class="brand">freakersix</div>
+    <div class="tagline-sub">scratching my head..</div>
+
+    <div>
+      <span class="glitch" data-text="f6dev">f6dev</span>
+    </div>
+
+    <div class="terminal-block">
+      <div class="terminal-prompt">~/f6dev $ <span>init portfolio --mode=soon</span></div>
+      <div class="typing-row">
+        <span id="typed"></span><span class="cursor">█</span>
+      </div>
+    </div>
+
+    <div class="links">
+      <a class="link" href="https://github.com/freakersix" target="_blank">[ github ]</a>
+      <a class="link" href="mailto:freakersix@ik.me">[ contact ]</a>
+    </div>
+
+  </div>
+
+  <div class="statusbar">
+    <span><span class="dot"></span>system online</span>
+    <span>f6dev.com</span>
+    <span>est. 2026</span>
+  </div>
+
+  <script>
+    // typing animation
+    const phrases = [
+      'something cool is loading...',
+      'portfolio: incoming',
+      'IT + hardware + code',
+      'building cool stuff',
+      'stay tuned :)',
+      'homelab enjoyer',
+    ];
+    let pi = 0, ci = 0, del = false;
+    const el = document.getElementById('typed');
+
+    function type() {
+      const p = phrases[pi];
+      if (!del) {
+        el.textContent = p.slice(0, ++ci);
+        if (ci === p.length) { del = true; setTimeout(type, 2200); return; }
+      } else {
+        el.textContent = p.slice(0, --ci);
+        if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
+      }
+      setTimeout(type, del ? 35 : 75);
+    }
+    type();
+
+    // floating symbol particles
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const syms = ['0','1','{','}','<','>','/','\\','#','$','%','~','^','*','=','+','|','!','?','@'];
+    const pts = Array.from({length: 65}, () => ({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      s: syms[Math.floor(Math.random() * syms.length)],
+      spd: 0.15 + Math.random() * 0.45,
+      op: 0.04 + Math.random() * 0.13,
+      sz: 11 + Math.floor(Math.random() * 16),
+      col: Math.random() > 0.5 ? '#8cb81a' : '#c0176b',
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pts.forEach(p => {
+        ctx.font = `${p.sz}px VT323, monospace`;
+        ctx.fillStyle = p.col;
+        ctx.globalAlpha = p.op;
+        ctx.fillText(p.s, p.x, p.y);
+        p.y -= p.spd;
+        if (p.y < -20) {
+          p.y = canvas.height + 20;
+          p.x = Math.random() * canvas.width;
+          p.s = syms[Math.floor(Math.random() * syms.length)];
+        }
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
+
+
